@@ -9,3 +9,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+add_executable(WOA src/WOA.cpp src/Util_Euclidean.cpp src/Util_Genetics.cpp src/Util_mytools.cpp
+    src/Util_ReadData.cpp src/Util_Search.cpp)
+add_executable(WOAH src/WOAH.cpp src/Util_Euclidean.cpp src/Util_Genetics.cpp src/Util_mytools.cpp
+    src/Util_ReadData.cpp src/Util_Search.cpp)

@@ -21,6 +21,7 @@
 #include "../inc/eigen-3.4.0/Eigen/Dense"
 #include "Euclidean.h"
 #include "mytools.h"
+#include "Search.h"
 #include "../inc/random.hpp"
 #include <string.h>
 #include <vector>
@@ -114,37 +115,5 @@ int onlyBestCrossing(MatrixXd data, vector<char> Tlabel, MatrixXd* P1,MatrixXd* 
 int randomCrossKeepBest(MatrixXd data, vector<char> Tlabel, MatrixXd* P1,MatrixXd* NP2,
         MatrixXd& GenData,int CrossType, unsigned int Cruzes,unsigned int Mutacion);
 
-/*
- * @brief Data una matriz de datos con sus etiquetas y una matriz de pesos,
- * para cada fila de la matriz de pesos computamos el valor resultante del 1NN
- * ponderado con los parámetros de reducción y tasa de acierto multiplicados por
- * el valor alpha.
- * @param data matriz con los datos,
- * @param Tlabel vector con las etiquetas,
- * @param Solutions matriz con los pesos
- * @param alpha Ponderación entre reducción y Tasa de Aciertos.
- * @return Devolvemos un vector con la puntuación de cada fila en sus columnas.
- */
-RowVectorXd getOnlyFit(MatrixXd data, vector<char> Tlabel, MatrixXd& Solutions,float alpha=0.5);
-
-RowVectorXd getFit(MatrixXd data, vector<char> Tlabel, MatrixXd& Solutions, MatrixXd& GenData, float alpha=0.5);
-
-RowVectorXd get1Fit(MatrixXd data, vector<char> Tlabel, RowVectorXd& Weights, float alpha=0.5 );
-
-/*
- *@brief Aplicamos búqueda local desde 0 hasta max_eval, con un máximo de vecinos
- visitados igual a maxTilBetter;
-    Los valores que devuelven son: El nuevo peso por return, el valor de fitness
-    de ese peso y el número de evaluaciones utilizados;
- *@param allData Matriz con los datos.
- *@param label Etiquetas del vector.
- *@param Weight Peso a mejorar.
- *@param eval_num parte de 0 y devuelve el número de evaluaciones obtenidos;
- *@param max_eval número máximo de evaluaciones
- *@param fitness puntuación obtenida por los pesos.
- *@param alpha ponderación de la función.
- */
-RowVectorXd LocalSearch(MatrixXd allData,vector<char> label, RowVectorXd Weights,
-unsigned int& eval_num, unsigned int max_eval, unsigned int maxTilBetter, vector<float>& fitness, float alpha=0.5, long int seed=1);
 
 #endif
