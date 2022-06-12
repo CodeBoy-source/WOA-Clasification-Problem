@@ -32,7 +32,7 @@ int main(int argc, char** argv){
         cerr << "[EXAMPLE]: ./main parkinsons.arff 1 2 1 150421 0" << endl;
         exit(-1);
     }
-    bool debuggin = true;
+    bool debuggin = false;
     string filename = argv[1];
     char type1 = *argv[2];
     char type2 = *argv[3];

@@ -40,6 +40,16 @@ int main(int argc, char** argv){
     long int seed = atol(argv[5]);
     int shuffle = atoi(argv[6]);
     unsigned int popSize = atoi(argv[7]);
+    float lambda = 6;
+    if(argc>8){
+        lambda = stof(argv[8]);
+        if(lambda==0)
+            lambda = 0.1;
+    }
+    bool HyperSearch = false;
+    if(argc>9){
+        HyperSearch = (atoi(argv[9])>=1)?true:false;
+    }
     srand(seed);
     Random::seed(seed);
     bool printing = (streambus>=1)?false:true;
@@ -48,6 +58,7 @@ int main(int argc, char** argv){
     string path = get_selfpath();
     path = path.substr(0,path.find_last_of("/\\") + 1);
     bool plotting = false;
+    int evaluations, maxEvaluations = 500, cumulativeIteration, iteration, maxIterations;
     if(streambus>=1) {
         //https://www.codegrepper.com/code-examples/cpp/c%2B%2B+get+filename+from+path
         // get filename
@@ -56,10 +67,18 @@ int main(int argc, char** argv){
         std::string::size_type const p(base_filename.find_last_of('.'));
         std::string file_without_extension = base_filename.substr(0, p);
 
-        string datafilename = "WOAH_"+to_string(popSize)+file_without_extension+to_string(seed)+"_"+to_string(shuffle);
+        string datafilename;
+        if(!HyperSearch)
+            datafilename = "WOAH_"+to_string(popSize)+file_without_extension+to_string(seed)+"_"+to_string(shuffle);
+        else
+            datafilename = "WOAH_"+to_string(maxEvaluations)+file_without_extension+to_string(seed)+"_"+to_string(shuffle);
+        datafilename += (HyperSearch)?"HS":"";
         writefile = path+"../results/"+datafilename;
         writefile += ".txt";
-        myfile.open(writefile,ios::out|ios::trunc);
+        if(HyperSearch)
+            myfile.open(writefile,ios::out|ios::app);
+        else
+            myfile.open(writefile,ios::out|ios::trunc);
         if(!myfile.is_open()){
             cerr << "[ERROR]: Couldn't open file, printing enabled" << endl;
             printing = true;
@@ -81,8 +100,6 @@ int main(int argc, char** argv){
     vector<char> label;
     MatrixXd allData = readValues(filename,label);
 
-    std::normal_distribution<double> distribution(0.0, sqrt(0.3));
-
     high_resolution_clock::time_point momentoInicio, momentoFin;
     milliseconds tiempo;
 
@@ -91,31 +108,31 @@ int main(int argc, char** argv){
     /// Inicializamos todas las variables que vamos a necesitar para almacenar información
     if(shuffle==1){
         cout << "[WARNING]: Data has been shuffled; " << endl;
-        if(streambus>=1)
+        if(streambus>=1 && !HyperSearch)
             myfile << "[WARNING]: Data has been shuffled; " << endl;
         shuffleData(allData,label,seed);
     }
     if(shuffle==2){
         cout << "[WARNING]: Data has been balanced and shuffled (inevitably); " << endl;
-        if(streambus>=1)
+        if(streambus>=1 && !HyperSearch)
             myfile << "[WARNING]: Data has been balanced and shuffled (inevitably); " << endl;
         group1 = getClassLabelled(allData,label, label_group1, type1);
         group2 = getClassLabelled(allData,label, label_group2, type2);
     }
 
-    if(myfile.is_open()){
+    if(myfile.is_open() && !HyperSearch){
         myfile << " ### Algoritmo WOA ###\n ";
         myfile << "F\tclasific\treducir \tfitness \ttime\n";
     }
 
     MatrixXd WhalePop(popSize,allData.cols()), WhaleFit(popSize,2);
     MatrixXd::Index maxIndex,minIndex;
-    RowVectorXd bestWhale(allData.cols()),allTimeBest(allData.cols()),Direction(allData.cols()),bestFit(2),allTimeFit(2),oldBestFit(2);
-    int maxcols = allData.cols(), evaluations, maxEvaluations = 15000, cumulativeIteration, iteration, maxIterations;
+    RowVectorXd bestWhale(allData.cols()),allTimeBest(allData.cols()),
+                Direction(allData.cols()),bestFit(2),allTimeFit(2),oldBestFit(2);
     // THIS IS THE IMPORTANT PARAMETER
-    int H = ceil(allData.cols()*3.5);
+    int H = ceil(allData.cols()*lambda);
     float alpha = 0.5, a, a2, A,C,b,l,p, oldavg,newavg;
-    unsigned int maxTilBetter = 20*allData.cols(), eval_num=0, i, index ;
+    unsigned int i; // maxTilBetter = 20*allData.cols(), eval_num=0;
     vector<double> randomA,randomC,randomL;
     vector<int> indexGrid;
     vector<float> behaviour; behaviour.resize(2);
@@ -126,9 +143,9 @@ int main(int argc, char** argv){
         else
             getBalancedFold(group1,label_group1,group2,label_group2,data,Tlabel, test, Ttlabel,x,seed);
         // Generate random population
-        WhalePop = (MatrixXd::Random(popSize,maxcols) + MatrixXd::Constant(popSize,maxcols,1))/2.0;
+        WhalePop = (MatrixXd::Random(popSize,allData.cols()) + MatrixXd::Constant(popSize,allData.cols(),1))/2.0;
         getFit(data,Tlabel,WhalePop,WhaleFit,alpha);
-        // INITIALIZE bestWhale
+        // INITIALIZE BESTWHALE VALUES
         WhaleFit.rowwise().sum().maxCoeff(&maxIndex);
         allTimeBest = bestWhale = WhalePop.row(maxIndex);
         allTimeFit = oldBestFit = bestFit = WhaleFit.row(maxIndex);
@@ -142,9 +159,9 @@ int main(int argc, char** argv){
             if(H!=0){
                 a = 2.0 * (1.0-float(iteration)/float(maxIterations));
                 a2 = -1.0+float(iteration)*((-1.0)/float(maxIterations));
-            }else{ // ATTACK
-                a = 2.0 * (1.0-float(maxIterations-1)/float(maxIterations));
-                a2 = -1.0+float(maxIterations-1)*((-1.0)/float(maxIterations));
+            }else{ // ATTACK PREY
+                a = 2.0 * (1.0-float(maxIterations)/float(maxIterations));
+                a2 = -1.0+float(maxIterations)*((-1.0)/float(maxIterations));
             }
             randomA = Random::get<std::vector>(0.0,1.0,popSize);
             randomC = Random::get<std::vector>(0.0,1.0,popSize);
@@ -172,7 +189,6 @@ int main(int argc, char** argv){
                     WhalePop.row(i) = Direction * exp(b*l) * cos(2*M_PI*l) + bestWhale;
                 }
             }
-            // This takes care of clipping the values from the MatrixSolutions as well
             getFit(data,Tlabel,WhalePop,WhaleFit,alpha);
 
             evaluations += popSize;
@@ -185,7 +201,8 @@ int main(int argc, char** argv){
                 }
             }
 
-            ++iteration;
+            // ++iteration;
+            iteration += popSize;
             if(debuggin){
                 WhaleFit.rowwise().sum().maxCoeff(&maxIndex);
                 WhaleFit.rowwise().sum().minCoeff(&minIndex);
@@ -200,30 +217,33 @@ int main(int argc, char** argv){
                 progress_bar(float(x*maxEvaluations + evaluations)/float(maxEvaluations*folds));
             }
             if(plotting){
+            WhaleFit.rowwise().sum().maxCoeff(&maxIndex);
+            WhaleFit.rowwise().sum().minCoeff(&minIndex);
+            output = to_string(cumulativeIteration) + "\t" + to_string(WhaleFit(maxIndex,0)/alpha) +
+                "\t" + to_string(WhaleFit(maxIndex,1)/(1-alpha)) + "\t" + to_string(WhaleFit.row(maxIndex).sum());
+            plot << std::setw(31) << output;
+            output = "\t" + to_string(WhaleFit(minIndex,0)/alpha) + "\t" + to_string(WhaleFit(minIndex,1)/(1-alpha)) +
+                "\t" + to_string(WhaleFit.row(minIndex).sum()) ;
+            plot << std::setw(30) << output;
+            output = "\t" + to_string(allTimeFit(0)/alpha) + "\t" + to_string(allTimeFit(1)/(1-alpha)) +
+                "\t" + to_string(allTimeFit.sum()) + "\n";
+            plot << std::setw(30) << output;
+        }
+        // RESTART SEARCH
+        newavg = (WhaleFit.rowwise().sum()).sum();
+        if((abs(newavg - oldavg)<pow(10,-9) && oldBestFit == bestFit)||(H==0)){
+            H--;
+            if(H<0){
+                Mutate(&WhalePop,indexGrid,WhalePop.rows()*WhalePop.cols());
+                getFit(data,Tlabel,WhalePop,WhaleFit,alpha);
                 WhaleFit.rowwise().sum().maxCoeff(&maxIndex);
-                WhaleFit.rowwise().sum().minCoeff(&minIndex);
-                output = to_string(cumulativeIteration) + "\t" + to_string(WhaleFit(maxIndex,0)/alpha) +
-                    "\t" + to_string(WhaleFit(maxIndex,1)/(1-alpha)) + "\t" + to_string(WhaleFit.row(maxIndex).sum());
-                plot << std::setw(31) << output;
-                output = "\t" + to_string(WhaleFit(minIndex,0)/alpha) + "\t" + to_string(WhaleFit(minIndex,1)/(1-alpha)) +
-                    "\t" + to_string(WhaleFit.row(minIndex).sum()) + "\n";
-                plot << std::setw(30) << output;
-            }
-            // RESTART SEARCH CHC
-            newavg = (WhaleFit.rowwise().sum()).sum();
-            if((abs(newavg - oldavg)<pow(10,-9) && oldBestFit == bestFit)||(H==0)){
-                H--;
-                if(H<0){
-                    Mutate(&WhalePop,indexGrid,WhalePop.rows()*WhalePop.cols());
-                    getFit(data,Tlabel,WhalePop,WhaleFit,alpha);
-                    WhaleFit.rowwise().sum().maxCoeff(&maxIndex);
-                    bestWhale = WhalePop.row(maxIndex);
-                    bestFit = WhaleFit.row(maxIndex);
-                    oldavg = (WhaleFit.rowwise().sum()).sum();
-                    evaluations += popSize;
-                    H = WhalePop.cols()*3.5;
-                    iteration = 0;
-                    maxIterations = (maxEvaluations-evaluations)/popSize;
+                bestWhale = WhalePop.row(maxIndex);
+                bestFit = WhaleFit.row(maxIndex);
+                oldavg = (WhaleFit.rowwise().sum()).sum();
+                evaluations += popSize;
+                H = WhalePop.cols()*lambda;
+                iteration = 0;
+                maxIterations = (maxEvaluations-evaluations)/popSize;
                 }
             }
             if(iteration>0){
@@ -242,10 +262,15 @@ int main(int argc, char** argv){
             cout << "[BEST FITNESS]: " << bestFit(0)/alpha << "\t" << bestFit(1)/(1-alpha) << "\t" << bestFit.sum() << "\t";
             cout << tiempo.count() << endl;
         }else{
-            output = to_string(x) + "\t" + to_string(bestFit(0)/alpha)
+            if(HyperSearch){
+                output = to_string(x) + "\t" + to_string(bestFit.sum()) + "\t" + to_string(lambda) + "\t" + to_string(popSize) + "\n";
+                myfile << std::setw(20) << output ;
+            }else{
+                output = to_string(x) + "\t" + to_string(bestFit(0)/alpha)
                     + "\t" +to_string(bestFit(1)/(1-alpha)) + "\t" +
-                    to_string(bestFit.sum()) + "\t" + to_string(tiempo.count()) + "\n";
-            myfile << std::setw(30) << output;
+                    to_string(bestFit.sum()) + "\t" + to_string(tiempo.count()) ;
+                myfile << std::setw(30) << output << "\n";
+            }
         }
     }
     cout << endl;
