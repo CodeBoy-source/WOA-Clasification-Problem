@@ -46,9 +46,15 @@ int main(int argc, char** argv){
         if(lambda==0)
             lambda = 0.1;
     }
-    bool HyperSearch = false;
+    float delta = 0.5*1/popSize*500;
     if(argc>9){
-        HyperSearch = (atoi(argv[9])>=1)?true:false;
+        delta  = ceil(0.5*1/popSize*stof(argv[9]));
+        if(delta<=0)
+            delta = 1;
+    }
+    bool HyperSearch = false;
+    if(argc>10){
+        HyperSearch = (atoi(argv[10])>=1)?true:false;
     }
     srand(seed);
     Random::seed(seed);
@@ -58,7 +64,7 @@ int main(int argc, char** argv){
     string path = get_selfpath();
     path = path.substr(0,path.find_last_of("/\\") + 1);
     bool plotting = false;
-    int evaluations, maxEvaluations = 500, cumulativeIteration, iteration, maxIterations;
+    int evaluations, maxEvaluations = popSize*2*delta, cumulativeIteration, iteration, maxIterations;
     if(streambus>=1) {
         //https://www.codegrepper.com/code-examples/cpp/c%2B%2B+get+filename+from+path
         // get filename
@@ -155,7 +161,7 @@ int main(int argc, char** argv){
         newavg = -1;
         maxIterations = (maxEvaluations-evaluations)/popSize;
         // ############################################################
-        while(evaluations < maxEvaluations){
+        while(evaluations < maxEvaluations && maxIterations>0){
             if(H!=0){
                 a = 2.0 * (1.0-float(iteration)/float(maxIterations));
                 a2 = -1.0+float(iteration)*((-1.0)/float(maxIterations));
@@ -263,8 +269,8 @@ int main(int argc, char** argv){
             cout << tiempo.count() << endl;
         }else{
             if(HyperSearch){
-                output = to_string(x) + "\t" + to_string(bestFit.sum()) + "\t" + to_string(lambda) + "\t" + to_string(popSize) + "\n";
-                myfile << std::setw(20) << output ;
+                output = to_string(x) + "\t" + to_string(bestFit.sum()) + "\t" + to_string(lambda) + "\t" + to_string(delta) + "\t" + to_string(popSize) + "\n";
+                myfile << std::setw(30) << output ;
             }else{
                 output = to_string(x) + "\t" + to_string(bestFit(0)/alpha)
                     + "\t" +to_string(bestFit(1)/(1-alpha)) + "\t" +
