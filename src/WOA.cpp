@@ -194,6 +194,7 @@ int main(int argc, char** argv){
             }
         }
         // ############################################################
+        if(plotting) plot << "\n\n";
         momentoFin = high_resolution_clock::now();
         tiempo = duration_cast<milliseconds>(momentoFin - momentoInicio);
         bestFit = get1Fit(test,Ttlabel, bestWhale,alpha);

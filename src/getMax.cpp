@@ -72,7 +72,7 @@ int main(int argc, char** argv){
         string filename = "";
         string path = get_selfpath();
         path = path.substr(0,path.find_last_of("/\\") + 1);
-        path = path +"../results/";
+        path = path +"../results/HSearch/";
         //https://www.codegrepper.com/code-examples/cpp/c%2B%2B+get+filename+from+path
         // get filename
         std::string base_filename = filename.substr(filename.find_last_of("/\\") + 1);

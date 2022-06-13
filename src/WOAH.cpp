@@ -222,6 +222,7 @@ int main(int argc, char** argv){
 
             // ++iteration;
             iteration += popSize;
+            cumulativeIteration++;
             if(debuggin){
                 WhaleFit.rowwise().sum().maxCoeff(&maxIndex);
                 WhaleFit.rowwise().sum().minCoeff(&minIndex);
@@ -270,6 +271,7 @@ int main(int argc, char** argv){
             }
             oldBestFit = bestFit;
         }
+        if(plotting) plot << "\n\n";
         if(allTimeFit.sum() < bestFit.sum())
             allTimeBest = bestWhale;
         // ############################################################
