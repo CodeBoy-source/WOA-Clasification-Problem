@@ -52,7 +52,7 @@ void getBest(parameters& best, vector<vector<parameters>> total_average){
 }
 
 int main(int argc, char** argv){
-    if(argc<=2){
+    if(argc<=3){
         cerr << "[ERROR]: Couldn't resolve file name" << endl;
         cerr << "[SOLVE]: You must specify the amount of folds and, optinually, maximum values to find and popSize" << endl;
         cerr << "[EXEC]: ./main 5 3 500" << endl;
@@ -83,8 +83,10 @@ int main(int argc, char** argv){
         for( const auto& entry: fs::directory_iterator(path)){
             read = entry.path();
             filename = read.substr(read.find_last_of("/\\") + 1 );
+            ofstream testfile;
             if(filename.find("WOAH_"+to_string(popSize))!=string::npos and filename.find("HS")!=string::npos){
                 myfile.open(path+filename);
+                filename = filename.substr(0,filename.find("."));
                 if(!myfile.is_open()){
                     cerr << "[ERROR]: Unable to open file at " + filename << endl;
                 }
@@ -102,6 +104,7 @@ int main(int argc, char** argv){
                     if(avg_fit!=0)
                         average.push_back({avg_fit,lambda,delta, popSize});
                 }
+
                 if(debuggin)
                     printMax(average,filename,n_top);
                 total_average.push_back(average);

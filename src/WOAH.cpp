@@ -48,7 +48,8 @@ int main(int argc, char** argv){
     }
     float delta = 0.5*1/popSize*500;
     if(argc>9){
-        delta  = ceil(0.5*1/popSize*stof(argv[9]));
+        //delta  = ceil(0.5*1/popSize*stof(argv[9]));
+        delta = stof(argv[9]);
         if(delta<=0)
             delta = 1;
     }
@@ -138,7 +139,8 @@ int main(int argc, char** argv){
     // THIS IS THE IMPORTANT PARAMETER
     int H = ceil(allData.cols()*lambda);
     float alpha = 0.5, a, a2, A,C,b,l,p, oldavg,newavg;
-    unsigned int i; // maxTilBetter = 20*allData.cols(), eval_num=0;
+    unsigned int i;
+    //unsigned int maxTilBetter = 20*allData.cols(), eval_num=0, index;
     vector<double> randomA,randomC,randomL;
     vector<int> indexGrid;
     vector<float> behaviour; behaviour.resize(2);
@@ -194,6 +196,17 @@ int main(int argc, char** argv){
                     Direction = (bestWhale - WhalePop.row(i)).array().abs();
                     WhalePop.row(i) = Direction * exp(b*l) * cos(2*M_PI*l) + bestWhale;
                 }
+                /*p = Random::get();
+                if(p<0.1){
+                    index = Random::get<unsigned>(0,popSize-1);
+                    behaviour[0] = WhaleFit(index,0);
+                    behaviour[1] = WhaleFit(index,1);
+                    WhalePop.row(index)=LocalSearch(data,Tlabel,WhalePop.row(index),
+                            eval_num,100,maxTilBetter,behaviour,alpha);
+                    evaluations += eval_num;
+                    WhaleFit(index,0) = behaviour[0];
+                    WhaleFit(index,1) = behaviour[1];
+                } */
             }
             getFit(data,Tlabel,WhalePop,WhaleFit,alpha);
 

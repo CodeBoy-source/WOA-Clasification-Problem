@@ -19,7 +19,7 @@ if [ -z "$2" ]
     exit
 fi
 
-for z in 15000
+for z in {100..500..50}
 do
     for j in 10 30 50 100 500
     do
