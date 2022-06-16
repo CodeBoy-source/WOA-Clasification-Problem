@@ -28,8 +28,9 @@ using Random = effolkronium::random_static;
 int main(int argc, char** argv){
     if(argc<=7) {
         cerr << "[ERROR]: Couldn't resolve file name;" << endl;
-        cerr << "[EXECUTION]: ./main (filename) (label1) (label2) (0-print,1-write) (seed)[int] (0-Normal, 1-ShuffleData,2-BalanceData) (PopSize)[+int]" << endl;
-        cerr << "[EXAMPLE]: ./main parkinsons.arff 1 2 1 150421 0" << endl;
+        cerr << "[EXECUTION]: ./main (filename) (label1) (label2) (0-print,1-write) (seed)[int] (0-Normal file, 1-ShuffleData,2-BalanceData) (PopSize)[+int]" << endl;
+        cerr << "[ADD OPTIONAL]: (lambda)[float] (delta)[float] (1=Searching parameters, write to HSfile.)" << endl;
+        cerr << "[EXAMPLE]: ./main parkinsons.arff 1 2 1 150421 0 10 0.75 12.5" << endl;
         exit(-1);
     }
     bool debuggin = false;
@@ -40,13 +41,13 @@ int main(int argc, char** argv){
     long int seed = atol(argv[5]);
     int shuffle = atoi(argv[6]);
     unsigned int popSize = atoi(argv[7]);
-    float lambda = 6;
+    float lambda = 0.75;
     if(argc>8){
         lambda = stof(argv[8]);
         if(lambda==0)
             lambda = 0.1;
     }
-    float delta = 0.5*1/popSize*500;
+    float delta = 12.5;
     if(argc>9){
         //delta  = ceil(0.5*1/popSize*stof(argv[9]));
         delta = stof(argv[9]);
@@ -56,6 +57,7 @@ int main(int argc, char** argv){
     bool HyperSearch = false;
     if(argc>10){
         HyperSearch = (atoi(argv[10])>=1)?true:false;
+        streambus = 1;
     }
     srand(seed);
     Random::seed(seed);
@@ -75,12 +77,14 @@ int main(int argc, char** argv){
         std::string file_without_extension = base_filename.substr(0, p);
 
         string datafilename;
-        if(!HyperSearch)
+        if(!HyperSearch){
             datafilename = "WOAH_"+to_string(popSize)+file_without_extension+to_string(seed)+"_"+to_string(shuffle);
-        else
+            writefile = path+"../results/"+datafilename;
+        }else{
             datafilename = "WOAH_"+to_string(maxEvaluations)+file_without_extension+to_string(seed)+"_"+to_string(shuffle);
-        datafilename += (HyperSearch)?"HS":"";
-        writefile = path+"../results/"+datafilename;
+            datafilename += "HS";
+            writefile = path+"../results/HSearch"+datafilename;
+        }
         writefile += ".txt";
         if(HyperSearch)
             myfile.open(writefile,ios::out|ios::app);
@@ -89,6 +93,7 @@ int main(int argc, char** argv){
         if(!myfile.is_open()){
             cerr << "[ERROR]: Couldn't open file, printing enabled" << endl;
             printing = true;
+            HyperSearch = false;
         }
         if(streambus>1){
             plotting = true;
@@ -181,12 +186,12 @@ int main(int argc, char** argv){
                 l = (a2-1)*randomL[i]+1;
                 p = Random::get();
                 if(p<0.5){
-                    if(abs(A)>1){
+                    if(abs(A)<1){
                        Direction = (C * bestWhale - WhalePop.row(i)).array().abs();
                        WhalePop.row(i) = bestWhale - A * Direction;
                     }else{
                         do{
-                        p = Random::get<unsigned>(0,popSize-1);
+                        p = Random::get<unsigned>(0,popSize);
                         }while(p==i);
 
                         Direction = (C * WhalePop.row(p) - WhalePop.row(i)).array().abs();
@@ -197,7 +202,7 @@ int main(int argc, char** argv){
                     WhalePop.row(i) = Direction * exp(b*l) * cos(2*M_PI*l) + bestWhale;
                 }
                 /*p = Random::get();
-                if(p<0.1){
+                if(p<0.1){ // Not getting good results
                     index = Random::get<unsigned>(0,popSize-1);
                     behaviour[0] = WhaleFit(index,0);
                     behaviour[1] = WhaleFit(index,1);

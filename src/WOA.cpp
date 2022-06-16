@@ -28,8 +28,8 @@ using Random = effolkronium::random_static;
 int main(int argc, char** argv){
     if(argc<=7) {
         cerr << "[ERROR]: Couldn't resolve file name;" << endl;
-        cerr << "[EXECUTION]: ./main (filename) (label1) (label2) (0-print,1-write) (seed)[int] (0-Normal, 1-ShuffleData,2-BalanceData) (PopSize)[+int]" << endl;
-        cerr << "[EXAMPLE]: ./main parkinsons.arff 1 2 1 150421 0" << endl;
+        cerr << "[EXECUTION]: ./main (filename) (label1) (label2) (0-print,1-write) (seed)[int] (0-Normal file, 1-ShuffleData,2-BalanceData) (PopSize)[+int]" << endl;
+        cerr << "[EXAMPLE]: ./main parkinsons.arff 1 2 1 150421 0 10" << endl;
         exit(-1);
     }
     bool debuggin = false;
@@ -145,7 +145,7 @@ int main(int argc, char** argv){
                 l = (a2-1)*randomL[i]+1;
                 p = Random::get();
                 if(p<0.5){
-                    if(abs(A)>1){
+                    if(abs(A)<1){
                        Direction = (C * bestWhale - WhalePop.row(i)).array().abs();
                        WhalePop.row(i) = bestWhale - A * Direction;
                     }else{
