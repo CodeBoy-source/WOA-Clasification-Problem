@@ -56,6 +56,7 @@ int main(int argc, char** argv){
         cerr << "[ERROR]: Couldn't resolve file name" << endl;
         cerr << "[SOLVE]: You must specify the amount of folds and, optinually, maximum values to find and popSize" << endl;
         cerr << "[EXEC]: ./main 5 3 500" << endl;
+        exit(-1);
     }
     unsigned int KFolds = atoi(argv[1]);
     unsigned int n_top = 2;
