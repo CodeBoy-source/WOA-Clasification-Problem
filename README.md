@@ -1,30 +1,32 @@
 # ** _Brian Sena Simons 3ºA - A2_ **
-# Práctica 3 - MetaHeurística
+# Práctica Final - MetaHeurística
 
 ### - Utilize el "cmake CMakeLists.txt && make" para compilar;
 ### - Los algoritmos pueden ser ejecutados utilizando los scripts en ./scripts {Ej. runAll.sh}
-    - Arg1: La semilla para los valores aleatorioas
-    - Arg2: 0 para usar el archivo de datos plano, 1 para barajar y 2 para equilibrar clases
-    - Arg3: Tamaño de la población
-    -./scripts/WOA.sh 150421 0 10
-    -./scripts/WOAH.sh 150421 0 10
+   - Arg1: La semilla para los valores aleatorioas
+   - Arg2: 0 para usar el archivo de datos plano, 1 para barajar y 2 para equilibrar clases
+   - Arg3: Tamaño de la población
+   
+    ./scripts/WOA.sh 150421 0 10
+    ./scripts/WOAH.sh 150421 0 10
 ### - Los resultados se guardan en ./results;
 ## Ejecución individual:
 ### Algoritmo WOA y WOAH:
-    - Arg1: nombre del archivo a ejecutar.
-    - Arg2: primera etiqueta.
-    - Arg3: segunda etiqueta.
-    - Arg4: 0 para sacar datos por pantalla, 1 para escribir a resultados y 2 para guardar datos para gráficas.
-    - Arg5: La semilla para los valores aleatorios.
-    - Arg6: 0 para usar el archivo de datos plano, 1 para barajar y 2 para equilibrar clases
-    - Arg7: Tamaño de la población.
-    - [OPCIONALES]:
-    - Arg8: Valor lambda;
-    - Arg9: Valor delta;
-    - Arg10: 1 Para entrar en modo búsqueda hiperparámetros, resultados en results/HSearch.
-    - [Ejemplos]:
-        - ./bin/WOA parkinsons.arff 1 2 0 150421 0 10
-        - ./bin/WOAH parkinsons.arff 1 2 0 150421 0 10 0.75 12.5
+   - Arg1: nombre del archivo a ejecutar.
+   - Arg2: primera etiqueta.
+   - Arg3: segunda etiqueta.
+   - Arg4: 0 para sacar datos por pantalla, 1 para escribir a resultados y 2 para guardar datos para gráficas.
+   - Arg5: La semilla para los valores aleatorios.
+   - Arg6: 0 para usar el archivo de datos plano, 1 para barajar y 2 para equilibrar clases
+   - Arg7: Tamaño de la población.
+   - [OPCIONALES]:
+   - Arg8: Valor lambda;
+   - Arg9: Valor delta;
+   - Arg10: 1 Para entrar en modo búsqueda hiperparámetros, resultados en results/HSearch.
+   - [Ejemplos]:
+  
+    ./bin/WOA parkinsons.arff 1 2 0 150421 0 10
+    ./bin/WOAH parkinsons.arff 1 2 0 150421 0 10 0.75 12.5
 
 ## Descripción breve del Problema
 La idea es comparar distintos tipos de algoritmos para clasificar datos pertenecientes
