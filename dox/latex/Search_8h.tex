@@ -1,0 +1,81 @@
+\hypertarget{Search_8h}{}\doxysection{Referencia del Archivo tools/\+Search.h}
+\label{Search_8h}\index{tools/Search.h@{tools/Search.h}}
+{\ttfamily \#include \char`\"{}../inc/eigen-\/3.\+4.\+0/\+Eigen/\+Dense\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../inc/random.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Genetics.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+\doxysubsection*{typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{Search_8h_a180f0653ebd0d5cdf633574b8c8512d3}\label{Search_8h_a180f0653ebd0d5cdf633574b8c8512d3}} 
+using {\bfseries Random} = effolkronium\+::random\+\_\+static
+\end{DoxyCompactItemize}
+\doxysubsection*{Funciones}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{Search_8h_aa6e714e6d0ece06c5548dbef223a08b9}\label{Search_8h_aa6e714e6d0ece06c5548dbef223a08b9}} 
+void {\bfseries Simulated\+Annealing} (Matrix\+Xd data, vector$<$ char $>$Tlabel, Matrix\+Xd\+::\+Row\+Xpr New\+Solution, Row\+Vector\+Xd \&Best\+Solution, Row\+Vector\+Xd \&best\+\_\+score, float max\+\_\+evaluations, float max\+\_\+vecinos, float max\+\_\+exitos, float mu, float phi)
+\item 
+\mbox{\Hypertarget{Search_8h_af1434f2306ea8b1599c8a953a61a88b0}\label{Search_8h_af1434f2306ea8b1599c8a953a61a88b0}} 
+void {\bfseries Simulated\+Annealing} (Matrix\+Xd data, vector$<$ char $>$Tlabel, Row\+Vector\+Xd \&New\+Solution, Row\+Vector\+Xd \&Best\+Solution, Row\+Vector\+Xd \&best\+\_\+score, float max\+\_\+evaluations, float max\+\_\+vecinos, float max\+\_\+exitos, float mu, float phi)
+\item 
+Row\+Vector\+Xd \mbox{\hyperlink{Search_8h_af0dbfbb876e5f5a4c163b92614bce384}{Local\+Search}} (Matrix\+Xd all\+Data, vector$<$ char $>$ label, Row\+Vector\+Xd Weights, unsigned int \&eval\+\_\+num, unsigned int max\+\_\+eval, unsigned int max\+Til\+Better, vector$<$ float $>$ \&fitness, float alpha=0.\+5, long int seed=1)
+\item 
+Row\+Vector\+Xd \mbox{\hyperlink{Search_8h_a8bd8faabaaff105e47a6ebee99e021b6}{Local\+Search\+Strong}} (Matrix\+Xd all\+Data, vector$<$ char $>$ label, Row\+Vector\+Xd Weights, unsigned int \&eval\+\_\+num, unsigned int max\+\_\+eval, unsigned int max\+Til\+Better, vector$<$ float $>$ \&fitness, float alpha=0.\+5, long int seed=1)
+\item 
+Row\+Vector\+Xd \mbox{\hyperlink{Search_8h_a3593e1ce84acf5a770639d6411c98c1e}{get\+Only\+Fit}} (Matrix\+Xd data, vector$<$ char $>$ Tlabel, Matrix\+Xd \&Solutions, float alpha=0.\+5)
+\item 
+Row\+Vector\+Xd \mbox{\hyperlink{Search_8h_a3d9f261a5a4362062aa818e13008c788}{get\+Fit}} (Matrix\+Xd data, vector$<$ char $>$ Tlabel, Matrix\+Xd \&Solutions, Matrix\+Xd \&Gen\+Data, float alpha=0.\+5)
+\item 
+\mbox{\Hypertarget{Search_8h_a6098a2f410e0c7254e0dce9566524fbb}\label{Search_8h_a6098a2f410e0c7254e0dce9566524fbb}} 
+Row\+Vector\+Xd {\bfseries get1\+Fit} (Matrix\+Xd data, vector$<$ char $>$ Tlabel, Row\+Vector\+Xd \&Weights, float alpha=0.\+5)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Descripción detallada}
+\begin{DoxyVersion}{Versión}
+1.\+0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Fecha}
+11/06/2022 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Autor}
+Brian Sena Simons 3º\+A-\/\+A2 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Documentación de las funciones}
+\mbox{\Hypertarget{Search_8h_a3d9f261a5a4362062aa818e13008c788}\label{Search_8h_a3d9f261a5a4362062aa818e13008c788}} 
+\index{Search.h@{Search.h}!getFit@{getFit}}
+\index{getFit@{getFit}!Search.h@{Search.h}}
+\doxysubsubsection{\texorpdfstring{getFit()}{getFit()}}
+{\footnotesize\ttfamily Row\+Vector\+Xd get\+Fit (\begin{DoxyParamCaption}\item[{Matrix\+Xd}]{data,  }\item[{vector$<$ char $>$}]{Tlabel,  }\item[{Matrix\+Xd \&}]{Solutions,  }\item[{Matrix\+Xd \&}]{Gen\+Data,  }\item[{float}]{alpha = {\ttfamily 0.5} }\end{DoxyParamCaption})}
+
+Truncamos los pesos a 0 y 1; Contamos las reducciones a 0.\mbox{\Hypertarget{Search_8h_a3593e1ce84acf5a770639d6411c98c1e}\label{Search_8h_a3593e1ce84acf5a770639d6411c98c1e}} 
+\index{Search.h@{Search.h}!getOnlyFit@{getOnlyFit}}
+\index{getOnlyFit@{getOnlyFit}!Search.h@{Search.h}}
+\doxysubsubsection{\texorpdfstring{getOnlyFit()}{getOnlyFit()}}
+{\footnotesize\ttfamily Row\+Vector\+Xd get\+Only\+Fit (\begin{DoxyParamCaption}\item[{Matrix\+Xd}]{data,  }\item[{vector$<$ char $>$}]{Tlabel,  }\item[{Matrix\+Xd \&}]{Solutions,  }\item[{float}]{alpha = {\ttfamily 0.5} }\end{DoxyParamCaption})}
+
+Truncamos los pesos a 0 y 1; Contamos las reducciones a 0.\mbox{\Hypertarget{Search_8h_af0dbfbb876e5f5a4c163b92614bce384}\label{Search_8h_af0dbfbb876e5f5a4c163b92614bce384}} 
+\index{Search.h@{Search.h}!LocalSearch@{LocalSearch}}
+\index{LocalSearch@{LocalSearch}!Search.h@{Search.h}}
+\doxysubsubsection{\texorpdfstring{LocalSearch()}{LocalSearch()}}
+{\footnotesize\ttfamily Row\+Vector\+Xd Local\+Search (\begin{DoxyParamCaption}\item[{Matrix\+Xd}]{all\+Data,  }\item[{vector$<$ char $>$}]{label,  }\item[{Row\+Vector\+Xd}]{Weights,  }\item[{unsigned int \&}]{eval\+\_\+num,  }\item[{unsigned int}]{max\+\_\+eval,  }\item[{unsigned int}]{max\+Til\+Better,  }\item[{vector$<$ float $>$ \&}]{fitness,  }\item[{float}]{alpha = {\ttfamily 0.5},  }\item[{long int}]{seed = {\ttfamily 1} }\end{DoxyParamCaption})}
+
+Modificamos el indice barajado correspondiente para modificar los pesos.
+
+Si hemos modificados volvemos a barajar.
+
+Evaluamos la función.
+
+Verificamos si hemos mejorado, actuamos acorde.\mbox{\Hypertarget{Search_8h_a8bd8faabaaff105e47a6ebee99e021b6}\label{Search_8h_a8bd8faabaaff105e47a6ebee99e021b6}} 
+\index{Search.h@{Search.h}!LocalSearchStrong@{LocalSearchStrong}}
+\index{LocalSearchStrong@{LocalSearchStrong}!Search.h@{Search.h}}
+\doxysubsubsection{\texorpdfstring{LocalSearchStrong()}{LocalSearchStrong()}}
+{\footnotesize\ttfamily Row\+Vector\+Xd Local\+Search\+Strong (\begin{DoxyParamCaption}\item[{Matrix\+Xd}]{all\+Data,  }\item[{vector$<$ char $>$}]{label,  }\item[{Row\+Vector\+Xd}]{Weights,  }\item[{unsigned int \&}]{eval\+\_\+num,  }\item[{unsigned int}]{max\+\_\+eval,  }\item[{unsigned int}]{max\+Til\+Better,  }\item[{vector$<$ float $>$ \&}]{fitness,  }\item[{float}]{alpha = {\ttfamily 0.5},  }\item[{long int}]{seed = {\ttfamily 1} }\end{DoxyParamCaption})}
+
+Evaluamos la función.
+
+Verificamos si hemos mejorado, actuamos acorde.

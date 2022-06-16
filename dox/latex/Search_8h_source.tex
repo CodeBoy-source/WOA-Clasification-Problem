@@ -1,0 +1,67 @@
+\hypertarget{Search_8h_source}{}\doxysection{Search.\+h}
+\label{Search_8h_source}\index{tools/Search.h@{tools/Search.h}}
+\mbox{\hyperlink{Search_8h}{Ir a la documentación de este archivo.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 }
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#ifndef SEARCH\_H}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#define SEARCH\_H}}
+\DoxyCodeLine{9 }
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}../inc/eigen-\/3.4.0/Eigen/Dense"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}../inc/random.hpp"{}}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{Genetics_8h}{Genetics.h}}"{}}}
+\DoxyCodeLine{13 \textcolor{preprocessor}{\#include <string.h>}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{15 }
+\DoxyCodeLine{16 \textcolor{keyword}{using namespace }std;}
+\DoxyCodeLine{17 \textcolor{keyword}{using namespace }Eigen;}
+\DoxyCodeLine{18 \textcolor{keyword}{using namespace }std::chrono;}
+\DoxyCodeLine{19 \textcolor{keyword}{using} Random = effolkronium::random\_static;}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22 \textcolor{keywordtype}{void} SimulatedAnnealing(MatrixXd data, vector<char>Tlabel, MatrixXd::RowXpr NewSolution,}
+\DoxyCodeLine{23 RowVectorXd\& BestSolution, RowVectorXd\& best\_score, \textcolor{keywordtype}{float} max\_evaluations,}
+\DoxyCodeLine{24 \textcolor{keywordtype}{float} max\_vecinos,\textcolor{keywordtype}{float} max\_exitos,\textcolor{keywordtype}{float} mu,\textcolor{keywordtype}{float} phi);}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26 \textcolor{keywordtype}{void} SimulatedAnnealing(MatrixXd data, vector<char>Tlabel, RowVectorXd\& NewSolution,}
+\DoxyCodeLine{27 RowVectorXd\& BestSolution, RowVectorXd\& best\_score, \textcolor{keywordtype}{float} max\_evaluations,}
+\DoxyCodeLine{28 \textcolor{keywordtype}{float} max\_vecinos,\textcolor{keywordtype}{float} max\_exitos,\textcolor{keywordtype}{float} mu,\textcolor{keywordtype}{float} phi);}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30 \textcolor{comment}{/*}}
+\DoxyCodeLine{31 \textcolor{comment}{ *@brief Aplicamos búqueda local desde 0 hasta max\_eval, con un máximo de vecinos}}
+\DoxyCodeLine{32 \textcolor{comment}{ visitados igual a maxTilBetter;}}
+\DoxyCodeLine{33 \textcolor{comment}{    Los valores que devuelven son: El nuevo peso por return, el valor de fitness}}
+\DoxyCodeLine{34 \textcolor{comment}{    de ese peso y el número de evaluaciones utilizados;}}
+\DoxyCodeLine{35 \textcolor{comment}{ *@param allData Matriz con los datos.}}
+\DoxyCodeLine{36 \textcolor{comment}{ *@param label Etiquetas del vector.}}
+\DoxyCodeLine{37 \textcolor{comment}{ *@param Weight Peso a mejorar.}}
+\DoxyCodeLine{38 \textcolor{comment}{ *@param eval\_num parte de 0 y devuelve el número de evaluaciones obtenidos;}}
+\DoxyCodeLine{39 \textcolor{comment}{ *@param max\_eval número máximo de evaluaciones}}
+\DoxyCodeLine{40 \textcolor{comment}{ *@param fitness puntuación obtenida por los pesos.}}
+\DoxyCodeLine{41 \textcolor{comment}{ *@param alpha ponderación de la función.}}
+\DoxyCodeLine{42 \textcolor{comment}{ */}}
+\DoxyCodeLine{43 RowVectorXd \mbox{\hyperlink{Search_8h_af0dbfbb876e5f5a4c163b92614bce384}{LocalSearch}}(MatrixXd allData,vector<char> label, RowVectorXd Weights,}
+\DoxyCodeLine{44 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}\& eval\_num, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} max\_eval, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} maxTilBetter, vector<float>\& fitness, \textcolor{keywordtype}{float} alpha=0.5, \textcolor{keywordtype}{long} \textcolor{keywordtype}{int} seed=1);}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46 RowVectorXd \mbox{\hyperlink{Search_8h_a8bd8faabaaff105e47a6ebee99e021b6}{LocalSearchStrong}}(MatrixXd allData,vector<char> label, RowVectorXd Weights,}
+\DoxyCodeLine{47 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int}\& eval\_num, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} max\_eval, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} maxTilBetter, vector<float>\& fitness, \textcolor{keywordtype}{float} alpha=0.5, \textcolor{keywordtype}{long} \textcolor{keywordtype}{int} seed=1);}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49 \textcolor{comment}{/*}}
+\DoxyCodeLine{50 \textcolor{comment}{ * @brief Data una matriz de datos con sus etiquetas y una matriz de pesos,}}
+\DoxyCodeLine{51 \textcolor{comment}{ * para cada fila de la matriz de pesos computamos el valor resultante del 1NN}}
+\DoxyCodeLine{52 \textcolor{comment}{ * ponderado con los parámetros de reducción y tasa de acierto multiplicados por}}
+\DoxyCodeLine{53 \textcolor{comment}{ * el valor alpha.}}
+\DoxyCodeLine{54 \textcolor{comment}{ * @param data matriz con los datos,}}
+\DoxyCodeLine{55 \textcolor{comment}{ * @param Tlabel vector con las etiquetas,}}
+\DoxyCodeLine{56 \textcolor{comment}{ * @param Solutions matriz con los pesos}}
+\DoxyCodeLine{57 \textcolor{comment}{ * @param alpha Ponderación entre reducción y Tasa de Aciertos.}}
+\DoxyCodeLine{58 \textcolor{comment}{ * @return Devolvemos un vector con la puntuación de cada fila en sus columnas.}}
+\DoxyCodeLine{59 \textcolor{comment}{ */}}
+\DoxyCodeLine{60 RowVectorXd \mbox{\hyperlink{Search_8h_a3593e1ce84acf5a770639d6411c98c1e}{getOnlyFit}}(MatrixXd data, vector<char> Tlabel, MatrixXd\& Solutions,\textcolor{keywordtype}{float} alpha=0.5);}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62 RowVectorXd \mbox{\hyperlink{Search_8h_a3d9f261a5a4362062aa818e13008c788}{getFit}}(MatrixXd data, vector<char> Tlabel, MatrixXd\& Solutions, MatrixXd\& GenData, \textcolor{keywordtype}{float} alpha=0.5);}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{64 RowVectorXd get1Fit(MatrixXd data, vector<char> Tlabel, RowVectorXd\& Weights, \textcolor{keywordtype}{float} alpha=0.5 );}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{66 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

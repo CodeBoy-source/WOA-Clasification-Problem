@@ -13,3 +13,4 @@ add_executable(WOA src/WOA.cpp src/Util_Euclidean.cpp src/Util_Genetics.cpp src/
     src/Util_ReadData.cpp src/Util_Search.cpp)
 add_executable(WOAH src/WOAH.cpp src/Util_Euclidean.cpp src/Util_Genetics.cpp src/Util_mytools.cpp
     src/Util_ReadData.cpp src/Util_Search.cpp)
+add_executable(getMax src/getMax.cpp src/Util_mytools.cpp)

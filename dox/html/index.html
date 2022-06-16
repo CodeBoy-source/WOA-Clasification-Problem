@@ -68,16 +68,17 @@ $(function() {
 <div class="contents">
 <div class="textblock"><p ><a class="anchor" id="md_README"></a></p>
 <h1><a class="anchor" id="autotoc_md1"></a>
-Práctica 3 - MetaHeurística</h1>
+Práctica Final - MetaHeurística</h1>
 <h3><a class="anchor" id="autotoc_md2"></a>
 - Utilize el "cmake CMakeLists.txt &amp;&amp; make" para compilar;</h3>
 <h3><a class="anchor" id="autotoc_md3"></a>
 - Los algoritmos pueden ser ejecutados utilizando los scripts en ./scripts {Ej. runAll.sh}</h3>
 <ul>
-<li>Para los scripts varian:<ul>
-<li>ILS -&gt; Es necesario tipo de salida 0=imprimir,1=guardar_en_resultados, una semilla y si barajamos los datos(0=normal,1=barajado,2=balanceado)</li>
-<li>Análogamente para los demás scripts.</li>
-</ul>
+<li>Arg1: La semilla para los valores aleatorioas</li>
+<li>Arg2: 0 para usar el archivo de datos plano, 1 para barajar y 2 para equilibrar clases</li>
+<li><p class="startli">Arg3: Tamaño de la población</p>
+<p class="startli">./scripts/WOA.sh 150421 0 10</p>
+<p class="startli">./scripts/WOAH.sh 150421 0 10 </p>
 </li>
 </ul>
 <h3><a class="anchor" id="autotoc_md4"></a>
@@ -85,25 +86,30 @@ Práctica 3 - MetaHeurística</h1>
 <h2><a class="anchor" id="autotoc_md5"></a>
 Ejecución individual:</h2>
 <h3><a class="anchor" id="autotoc_md6"></a>
-Algoritmo ILS:</h3>
+Algoritmo WOA y WOAH:</h3>
 <ul>
-<li>./ILS (filename) (label1)[char] (label2)[char] (0=Print/1=WriteFile/2=Write+Plot_data) (seed)[-∞,∞] (0=No/1=Shuffle/2=Balanced) (0=LocalSearch,1=SimulatedAnnealing)<ul>
-<li>Arg1 = filename -&gt; nombre del archivo de datos.</li>
-<li>Arg2 = label1 -&gt; etiqueta del primer grupo del conjunto de datos de tipo char.</li>
-<li>Arg3 = label2 -&gt; etiqueta del segundo grupo del conjunto de datos de tipo char.</li>
-<li>Arg4 = Bus -&gt; 0 es imprimir por pantalla, 1 es escribir a ./results y 2 es escribir también a ./resutls/plots.</li>
-<li>Arg5 = seed -&gt; semilla para el generador aleatorio.</li>
-<li>Arg6 = Preprocesar los datos -&gt; 0 es Normal, 1 es Barajado y 2 es equilibrio de clase.</li>
-<li>Arg7 = Searchtype -&gt; 0 es utilizar la búsqueda local, 1 es utilizar enfrimiamiento simulado.</li>
-</ul>
+<li>Arg1: nombre del archivo a ejecutar.</li>
+<li>Arg2: primera etiqueta.</li>
+<li>Arg3: segunda etiqueta.</li>
+<li>Arg4: 0 para sacar datos por pantalla, 1 para escribir a resultados y 2 para guardar datos para gráficas.</li>
+<li>Arg5: La semilla para los valores aleatorios.</li>
+<li>Arg6: 0 para usar el archivo de datos plano, 1 para barajar y 2 para equilibrar clases</li>
+<li>Arg7: Tamaño de la población.</li>
+<li>[OPCIONALES]:</li>
+<li>Arg8: Valor lambda;</li>
+<li>Arg9: Valor delta;</li>
+<li>Arg10: 1 Para entrar en modo búsqueda hiperparámetros, resultados en results/HSearch.</li>
+<li><p class="startli">[Ejemplos]:</p>
+<p class="startli">./bin/WOA parkinsons.arff 1 2 0 150421 0 10</p>
+<p class="startli">./bin/WOAH parkinsons.arff 1 2 0 150421 0 10 0.75 12.5</p>
 </li>
-<li>Análogamente para los demás algoritmos con excepción del argumento 7.</li>
 </ul>
 <h2><a class="anchor" id="autotoc_md7"></a>
 Descripción breve del Problema</h2>
 <p >La idea es comparar distintos tipos de algoritmos para clasificar datos pertenecientes a una base de datos públicas que nos provee el profesorado. Partiremos primero de la implementación del típico algoritmo de clasficación K-NN dónde K representa el número de vecinos a mirar y la idea conceptual es buscar los K vecinos más cercanos para realizar una predicción sobre que clase pertenece el objeto a predecir.</p>
-<p >Una vez implementado el algoritmo 1NN intentaremos mejorar el porcentaje de aciertos utilizando técnicas de ponderación de características mediante un vector de pesos. El grueso de la práctica está en el cálculo de esos pesos. En esta parte de la práctica compararemos los algoritmos empleados anteriormente (1NN, Greedy, búsqueda local) con unas variaciones que exploran las características de la búsqueda local.</p>
-<p >Tendremos la versión del enfriamiento simulado que se traduce en un comportamiento explorativo incrementado respecto a la búsqueda local que se degrada en el tiempo con intención de converger al máximo global con mayor facilidad al haber explorado más la función. (Simulado las partículas en caliente). Luego tendremos versiones que abarcan la característica que define el punto de partida de la búsqueda local, por ejemplo la búsqueda multi-arrance básica, y el descenso iterativo de la mejor solución mutada. </p>
+<p >Una vez implementado el algoritmo 1NN intentaremos mejorar el porcentaje de aciertos utilizando técnicas de ponderación de características mediante un vector de pesos. El grueso de la práctica está en el cálculo de esos pesos. En esta parte de la práctica compararemos los algoritmos empleados anteriormente (1NN, Greedy, búsqueda local) con un algoritmo bio-inspirado basado en las ballenas jorobadas.</p>
+<p >El comportamiento del algoritmo es como una variación del algoritmo basado en partículas, dónde el movimiento de las partículas en este caso es una descripción de la caza que realizan las ballenas jorobadas. Simulan un tipo de espiral o círculo alrededor de su preza, en este caso el óptimo de la función, en el cual se nota un factor explorativo explotativo que demarca la gran eficiencia de este algoritmo respecto a la optimización de función por su compromiso equilibrado entre ambas características.</p>
+<p >La idea es implementar y describir el algoritmo, analizar los resultados obtenidos y planificar/implementar una mejora del algoritmo basandose en lo estudiado en las clases de teoría sobre heurísticas y sus caracterísicas. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
